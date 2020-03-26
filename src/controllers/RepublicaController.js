@@ -15,17 +15,35 @@ exports.create = async (req, res) => {
     fotos
   } = req.body;
 
+  if((!nome || !tipo || !vaga || !genero || !comodos || !contas || !endereco || !adicionais || !telefones)){
+    let message = "Alguns campos obrigatórios não foram informados!!";
+    let required_fields = ['nome', "tipo", "vaga", "genero", "comodos", "contas", "endereco", "adicionais", "fotos"];
+    let code = "400.002";
+    return res.status(400).send({message, code, required_fields});
+  }
+
   try{
     return res.status(201).send(
       await Republica.create({
         nome: nome,
         tipo: tipo,
-        vaga: vaga,
+        vaga: {
+          tipo: vaga.tipo,
+          livre: vaga.livre,
+          total: vaga.total
+        },
         genero: genero,
         historia: historia,
         comodos: comodos,
         contas: contas,
-        endereco: endereco,
+        endereco: {
+          cep: endereco.cep,
+          rua: endereco.rua,
+          numero: endereco.numero,
+          bairro: endereco.bairro,
+          cidade: endereco.cidade,
+          uf: endereco.uf
+        },
         adicionais: adicionais,
         telefones: telefones,
         fotos: fotos
@@ -33,7 +51,7 @@ exports.create = async (req, res) => {
     );
   }catch (err) {
     let message = "Ocorreu um erro no cadastro da república"
-    let code = "400.00";
+    let code = "400.000";
     return res.status(400).send({code, message});
   }
 };
@@ -59,12 +77,23 @@ exports.update = async (req, res) => {
       await Republica.updateOne({_id: id}, {$set: {
         nome: nome,
         tipo: tipo,
-        vaga: vaga,
+        vaga: {
+          tipo: vaga.tipo,
+          livre: vaga.livre,
+          total: vaga.total
+        },
         genero: genero,
         historia: historia,
         comodos: comodos,
         contas: contas,
-        endereco: endereco,
+        endereco: {
+          cep: endereco.cep,
+          rua: endereco.rua,
+          numero: endereco.numero,
+          bairro: endereco.bairro,
+          cidade: endereco.cidade,
+          uf: endereco.uf
+        },
         adicionais: adicionais,
         telefones: telefones,
         fotos: fotos
@@ -91,3 +120,19 @@ exports.remove = async (req, res) => {
     return res.status(400).send({code, message});
   }
 };
+
+exports.detail = async (req, res) => {
+  const {
+    id
+  } = req.params;
+
+  try {
+    return res.status(200).send(
+      await Republica.findById(id)
+    );
+  } catch (error) {
+    let message = "Ocorreu um erro ao buscar detalhes da república";
+    let code = "400.00";
+    return res.status(400).send({code, message});
+  }
+}

@@ -35,8 +35,30 @@ const RepublicaSchema = new mongoose.Schema({
   comodos: [String],
   contas: [String],
   endereco: {
-    type: String,
-    required: true
+    cep: {
+      type: String,
+      required: true
+    },
+    rua: {
+      type: String,
+      required: true
+    },
+    numero: {
+      type: String,
+      required: true
+    },
+    bairro: {
+      type: String,
+      required: true
+    },
+    cidade: {
+      type: String,
+      required: true
+    },
+    uf: {
+      type: String,
+      required: true
+    }
   },
   adicionais: [String],
   telefones: [String],

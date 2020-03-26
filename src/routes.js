@@ -11,5 +11,6 @@ route.get('/', (req, res) => {
 route.post('/rep', RepublicaController.create);
 route.put('/rep', RepublicaController.update);
 route.delete('/rep', RepublicaController.remove);
+route.get('/rep/:id', RepublicaController.detail);
 
 module.exports = route;
