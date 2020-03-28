@@ -5,6 +5,7 @@ exports.create = async (req, res) => {
     nome,
     tipo,
     vaga,
+    premium,
     genero,
     historia,
     comodos,
@@ -15,9 +16,9 @@ exports.create = async (req, res) => {
     fotos
   } = req.body;
 
-  if((!nome || !tipo || !vaga || !genero || !comodos || !contas || !endereco || !adicionais || !telefones)){
+  if((!nome || !tipo || !vaga || !premium || !genero || !comodos || !contas || !endereco || !adicionais || !telefones)){
     let message = "Alguns campos obrigatórios não foram informados!!";
-    let required_fields = ['nome', "tipo", "vaga", "genero", "comodos", "contas", "endereco", "adicionais", "fotos"];
+    let required_fields = ['nome', "tipo", "vaga", "premium", "genero", "comodos", "contas", "endereco", "adicionais", "fotos"];
     let code = "400.002";
     return res.status(400).send({message, code, required_fields});
   }
@@ -32,6 +33,7 @@ exports.create = async (req, res) => {
           livre: vaga.livre,
           total: vaga.total
         },
+        premium: premium,
         genero: genero,
         historia: historia,
         comodos: comodos,
