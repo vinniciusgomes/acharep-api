@@ -163,3 +163,33 @@ exports.detail = async (req, res) => {
     return res.status(400).send({code, message});
   }
 }
+
+exports.list = async (req, res) => {
+  const fields = {};
+
+  if(req.query.limite){
+    limite = parseInt(req.query.limite);
+  }else{
+    limite = 500;
+  }
+
+  if(req.query.genero){
+    fields.genero = req.query.genero;
+  }
+
+  if(req.query.cidade){
+    fields["endereco.cidade"] = req.query.cidade;
+  }
+
+  if(req.query.preco){
+    fields.preco = { $lte: req.query.preco};
+  }
+
+  if(req.query.tipo){
+    fields["vaga.tipo"] = req.query.tipo;
+  }
+
+  const republica = await Republica.find(fields).sort({createdAt: -1}).limit(limite);
+
+  return res.send(republica);
+}
