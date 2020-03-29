@@ -9,12 +9,15 @@ route.get('/', (req, res) => {
 
 });
 
-route.post('/rep', RepublicaController.create);
-route.put('/rep', RepublicaController.update);
-route.delete('/rep', RepublicaController.remove);
 route.get('/rep/:id', RepublicaController.detail);
 
 route.post('/user', UsuarioController.signUp);
 route.get('/user', UsuarioController.signIn);
+
+route.use('/rep', UsuarioController.auth);
+
+route.post('/rep', RepublicaController.create);
+route.put('/rep', RepublicaController.update);
+route.delete('/rep', RepublicaController.remove);
 
 module.exports = route;

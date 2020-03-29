@@ -2,6 +2,7 @@ const Usuario = require('../models/UsuarioModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
+const mongoose = require('mongoose');
 
 exports.signUp = async (req, res) => {
   const {
@@ -58,4 +59,47 @@ exports.signIn = async (req, res) => {
   const token = jwt.sign({id: usuario._id}, config.key, { expiresIn: '30m'});
 
   res.status(200).send({token: token});
+}
+
+exports.auth = async (req, res, next) => {
+  if(!req.header('Authorization')){
+    let message = "Token de autenticação não fornecido";
+    let code = "400.000";
+    return res.status(400).send({code, message});
+  }
+
+  const token = req.header('Authorization').split(' ')[1];
+
+  jwt.verify(token, config.key, async (err, decoded) => {
+    if(err){
+      switch (err.name) {
+        case 'JsonWebTokenError':
+          message = "Token de autorização inválido";
+          code = "400.000";
+          return res.status(400).send({code, message});
+          break;
+        case 'TokenExpiredError':
+          message = "O token informado expirou, reenvie suas credenciais de login";
+          code = "400.000";
+          return res.status(400).send({code, message});
+          break;
+      }
+    }
+
+    try {
+      const usuario = await Usuario.findById(decoded.id);
+
+      if(!usuario){
+        let message = "Você não está autorizado a realizar esta operação";
+        let code = "400.000";
+        return res.status(400).send({code, message});
+      }
+
+      next();
+    } catch (error) {
+      let message = "Você não está autorizado a realizar esta operação";
+        let code = "401.000";
+        return res.status(401).send({code, message});
+    }
+  });
 }
