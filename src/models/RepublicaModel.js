@@ -9,6 +9,10 @@ const RepublicaSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  preco: {
+    type: Number,
+    required: true
+  },
   vaga: {
     tipo: {
       type: String,
