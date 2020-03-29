@@ -10,6 +10,7 @@ route.get('/', (req, res) => {
 });
 
 route.get('/rep/:id', RepublicaController.detail);
+route.get('/rep/', RepublicaController.list);
 
 route.post('/user', UsuarioController.signUp);
 route.get('/user', UsuarioController.signIn);
