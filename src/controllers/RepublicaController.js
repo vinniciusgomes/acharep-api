@@ -6,6 +6,7 @@ exports.create = async (req, res) => {
   const {
     nome,
     tipo,
+    preco,
     vaga,
     premium,
     genero,
@@ -18,10 +19,10 @@ exports.create = async (req, res) => {
     fotos
   } = req.body;
 
-  if((!nome || !tipo || !vaga || !premium || !genero || !comodos || !contas || !endereco || !adicionais || !telefones)){
+  if((!nome || !tipo || !preco || !vaga || !premium || !genero || !comodos || !contas || !endereco || !adicionais || !telefones)){
     let message = "Alguns campos obrigatórios não foram informados!!";
-    let required_fields = ['nome', "tipo", "vaga", "premium", "genero", "comodos", "contas", "endereco", "adicionais", "fotos"];
-    let code = "400.002";
+    let required_fields = ['nome', "tipo", "preco", "vaga", "premium", "genero", "comodos", "contas", "endereco", "adicionais", "fotos"];
+    let code = "400.000";
     return res.status(400).send({message, code, required_fields});
   }
 
@@ -34,6 +35,7 @@ exports.create = async (req, res) => {
       await Republica.create({
         nome: nome,
         tipo: tipo,
+        preco: preco,
         vaga: {
           tipo: vaga.tipo,
           livre: vaga.livre,
@@ -70,6 +72,7 @@ exports.update = async (req, res) => {
     id,
     nome,
     tipo,
+    preco,
     vaga,
     genero,
     historia,
@@ -86,6 +89,7 @@ exports.update = async (req, res) => {
       await Republica.updateOne({_id: id}, {$set: {
         nome: nome,
         tipo: tipo,
+        preco: preco,
         vaga: {
           tipo: vaga.tipo,
           livre: vaga.livre,
