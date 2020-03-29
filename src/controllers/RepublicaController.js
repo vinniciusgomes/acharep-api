@@ -1,6 +1,5 @@
 const Republica = require('../models/RepublicaModel');
 const jwt = require('jsonwebtoken');
-const config = require('../config/config');
 
 exports.create = async (req, res) => {
   const {
@@ -26,7 +25,7 @@ exports.create = async (req, res) => {
     return res.status(400).send({message, code, required_fields});
   }
 
-  let id = jwt.verify(req.header('Authorization').split(' ')[1], config.key, (err, decoded) => {
+  let id = jwt.verify(req.header('Authorization').split(' ')[1], process.env.APP_KEY, (err, decoded) => {
     return decoded.id;
   });
 

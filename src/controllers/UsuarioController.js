@@ -1,7 +1,6 @@
 const Usuario = require('../models/UsuarioModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const config = require('../config/config');
 const mongoose = require('mongoose');
 
 exports.signUp = async (req, res) => {
@@ -30,7 +29,7 @@ exports.signUp = async (req, res) => {
       senha: crypted
     });
 
-    const token = jwt.sign({id: _id}, config.key, { expiresIn: '30m' });
+    const token = jwt.sign({id: _id}, process.env.APP_KEY, { expiresIn: '30m' });
 
     return res.status(201).send({token: token});
   });
@@ -56,7 +55,7 @@ exports.signIn = async (req, res) => {
     return res.status(400).send({code, message});
   }
 
-  const token = jwt.sign({id: usuario._id}, config.key, { expiresIn: '30m'});
+  const token = jwt.sign({id: usuario._id}, process.env.APP_KEY, { expiresIn: '30m'});
 
   res.status(200).send({token: token});
 }
@@ -70,7 +69,7 @@ exports.auth = async (req, res, next) => {
 
   const token = req.header('Authorization').split(' ')[1];
 
-  jwt.verify(token, config.key, async (err, decoded) => {
+  jwt.verify(token, process.env.APP_KEY, async (err, decoded) => {
     if(err){
       switch (err.name) {
         case 'JsonWebTokenError':
