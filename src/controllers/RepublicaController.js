@@ -121,12 +121,19 @@ exports.remove = async (req, res) => {
   } = req.body;
 
   try {
-    return res.status(200).send(
-      await Republica.remove({_id: id}));
+    const deleted = await Republica.remove({_id: id});
+
+    if(!deleted.deletedCount){
+      let message = "Ocorreu um erro na exclusão da república";
+      let code = "500.000";
+      return res.status(500).send({code, message});
+    }
+
+    return res.status(200).send({ok: true});
   } catch (err) {
     let message = "Ocorreu um erro na exclusão da república";
-    let code = "400.00";
-    return res.status(400).send({code, message});
+    let code = "500.000";
+    return res.status(500).send({code, message});
   }
 };
 
