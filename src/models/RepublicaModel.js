@@ -63,6 +63,10 @@ const RepublicaSchema = new mongoose.Schema({
   adicionais: [String],
   telefones: [String],
   fotos: [String],
+  usuario_id: {
+    type: mongoose.Types.ObjectId,
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now

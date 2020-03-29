@@ -1,4 +1,5 @@
 const Republica = require('../models/RepublicaModel');
+const jwt = require('jsonwebtoken');
 
 exports.create = async (req, res) => {
   const {
@@ -129,12 +130,19 @@ exports.detail = async (req, res) => {
   } = req.params;
 
   try {
-    return res.status(200).send(
-      await Republica.findById(id)
-    );
+    const republica = await Republica.findById(id);
+
+    if(!republica){
+      let message = "Repúbica não encontrada";
+      let code = "400.000";
+      return res.status(400).send({code, message});
+    }
+
+    return res.status(200).send({republica});
+
   } catch (error) {
     let message = "Ocorreu um erro ao buscar detalhes da república";
-    let code = "400.00";
+    let code = "400.000";
     return res.status(400).send({code, message});
   }
 }
