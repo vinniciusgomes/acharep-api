@@ -31,7 +31,7 @@ exports.signUp = async (req, res) => {
 
     const token = jwt.sign({id: _id}, config.key, { expiresIn: '30m' });
 
-    return res.status(201).send(token);
+    return res.status(201).send({token: token});
   });
 }
 
@@ -57,5 +57,5 @@ exports.signIn = async (req, res) => {
 
   const token = jwt.sign({id: usuario._id}, config.key, { expiresIn: '30m'});
 
-  res.status(200).send(token);
+  res.status(200).send({token: token});
 }
