@@ -1,5 +1,6 @@
 const Republica = require('../models/RepublicaModel');
 const jwt = require('jsonwebtoken');
+const config = require('../config/config');
 
 exports.create = async (req, res) => {
   const {
@@ -23,6 +24,10 @@ exports.create = async (req, res) => {
     let code = "400.002";
     return res.status(400).send({message, code, required_fields});
   }
+
+  let id = jwt.verify(req.header('Authorization').split(' ')[1], config.key, (err, decoded) => {
+    return decoded.id;
+  });
 
   try{
     return res.status(201).send(
@@ -49,7 +54,8 @@ exports.create = async (req, res) => {
         },
         adicionais: adicionais,
         telefones: telefones,
-        fotos: fotos
+        fotos: fotos,
+        usuario_id: id
       })
     );
   }catch (err) {
@@ -138,7 +144,7 @@ exports.detail = async (req, res) => {
       return res.status(400).send({code, message});
     }
 
-    return res.status(200).send({republica});
+    return res.status(200).send(republica);
 
   } catch (error) {
     let message = "Ocorreu um erro ao buscar detalhes da república";

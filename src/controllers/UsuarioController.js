@@ -81,7 +81,8 @@ exports.auth = async (req, res, next) => {
         case 'TokenExpiredError':
           message = "O token informado expirou, reenvie suas credenciais de login";
           code = "400.000";
-          return res.status(400).send({code, message});
+          login = true;
+          return res.status(400).send({code, message, login});
           break;
       }
     }
