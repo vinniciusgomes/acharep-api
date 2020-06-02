@@ -180,12 +180,16 @@ exports.list = async (req, res) => {
     fields["endereco.cidade"] = req.query.cidade;
   }
 
-  if(req.query.preco){
-    fields.preco = { $lte: req.query.preco};
+  if(req.query.precoMin && req.query.precoMax){
+    fields.preco = { $gt: req.query.precoMin, $lt: req.query.precoMax };
+  }
+
+  if(req.query.vaga){
+    fields["vaga.tipo"] = req.query.vaga;
   }
 
   if(req.query.tipo){
-    fields["vaga.tipo"] = req.query.tipo;
+    fields["tipo"] = req.query.tipo;
   }
 
   const republica = await Republica.find(fields).sort({createdAt: -1}).limit(limite);
