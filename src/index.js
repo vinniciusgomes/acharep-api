@@ -6,15 +6,16 @@ const mongoose = require('mongoose');
 const app = express();
 
 mongoose.connect(
-    "mongodb://127.0.0.1:27017/acharep?gssapiServiceName=mongodb",
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }
+  process.env.MONGO_URL,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
 );
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 app.use(routes);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3333);
